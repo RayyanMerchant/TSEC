@@ -17,6 +17,8 @@ def MessageView(request):
         queryset = Applicant.objects.filter(school=school).order_by('clubs')
         message = ""
         for cur in queryset:
+            if cur.score < 1:
+                continue
             if not Absent.objects.filter(email=cur.email):
                 message += cur.clubs + "  " + cur.name + "  " + cur.phone_number + "\n"
             else:
@@ -25,7 +27,8 @@ def MessageView(request):
         """
         here we are assuming the whatsapp group to have the same name as the school name
         """
-        func('Test', message)
+        if message:
+            func('Test', message)
     
     
     return redirect('dashboard')
@@ -60,7 +63,7 @@ def SchoolSelectionView(request, pk):
     user_x = cur_location.latitude
     user_y = cur_location.longitude   
     schools = School.objects.all()
-    city = ['Mumbai', 'Pune', 'Satara', 'Lonavla', 'Mahabaleshwar', 'Nashik']
+    city = ['Diamond Jubilee', 'Christ Church', 'Don Bosco', 'St.Peters', 'Campion', 'St.Marys']
     a = [19.0760,18.5204,17.6805,18.7557,17.9307, 19.9975]
     b = [72.8777,73.8567,74.0183,73.4091,73.6477, 73.7898]
     mn = 10 ** 18
@@ -72,6 +75,12 @@ def SchoolSelectionView(request, pk):
             mn = cur
             closest = i
             dist = mn
+    
+    queryset = School.objects.filter(name=city[closest])
+    applicant.school = queryset[0]
+    applicant.save()
+    print("queryset[0] = ", queryset[0])
+    print("city[closest] = ", city[closest])
     context = {
         'user_x' : user_x,
         'user_y' : user_y,

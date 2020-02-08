@@ -3,7 +3,7 @@
 {% block content %}
     <div class="content-section">
         <h3> Applicant Details </h3>
-        <pre><h4>
+        <pre><h5>
             Email :                 {{ applicant.email }} <br>
             Name :                  {{ applicant.name }} <br>
             Phone Number :          {{ applicant.phone_number }} <br>
@@ -13,7 +13,7 @@
             Past Experience :       {{ applicant.experience }} <br>
             Aims/Reasons :          {{ applicant.why_aims }} <br>
             
-        </h4></pre>
+        </h5></pre>
         <form method='post'>
             {% csrf_token %}
             {{ form.as_p }}
